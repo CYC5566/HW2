@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "首頁";
+}
+
+<div class="text-center py-4">
+    <h1 class="display-6">金融商品喜好紀錄</h1>
+    @if (TempData["Message"] is string msg)
+    {
+        <div class="alert alert-success d-inline-block">@msg</div>
+    }
+    @if (User.Identity?.IsAuthenticated != true)
+    {
+        <p class="lead text-muted">
+            請 <a asp-controller="Account" asp-action="Register">註冊</a> 或 <a asp-controller="Account" asp-action="Login">登入</a>(僅需身分證字號，無密碼)，再使用喜好清單與帳號設定。
+        </p>
+    }
+    else
+    {
+        <p>
+            <a class="btn btn-primary me-2" asp-controller="LikeList" asp-action="Index">商品清單</a>
+            <a class="btn btn-outline-primary" asp-controller="Account" asp-action="Profile">我的帳號</a>
+        </p>
+    }
+</div>

@@ -1,0 +1,71 @@
+@model USUN2.Models.UserEditPageModel
+@{
+    ViewData["Title"] = "我的帳號";
+}
+
+<h1 class="h3 mb-3">我的帳號</h1>
+
+@if (TempData["Message"] is string ok)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ok
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @err
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm h-100">
+            <div class="card-header">基本資料</div>
+            <div class="card-body">
+                <form asp-action="Profile" asp-controller="Account" method="post" novalidate>
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="Profile.UserId" />
+                    <div class="mb-3">
+                        <label class="form-label">身分證字號</label>
+                        <input class="form-control" value="@Model.Profile.UserId" readonly />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Profile.UserName" class="form-label"></label>
+                        <input asp-for="Profile.UserName" class="form-control" />
+                        <span asp-validation-for="Profile.UserName" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Profile.Email" class="form-label"></label>
+                        <input asp-for="Profile.Email" class="form-control" />
+                        <span asp-validation-for="Profile.Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Profile.Account" class="form-label"></label>
+                        <input asp-for="Profile.Account" class="form-control" maxlength="50" autocomplete="off" />
+                        <span asp-validation-for="Profile.Account" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary">更新基本資料</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-danger mt-4">
+    <div class="card-header bg-danger text-white">刪除帳號</div>
+    <div class="card-body">
+        <p class="mb-2">刪除帳號將一併移除您的喜好清單與扣款帳號資料，且無法復原。</p>
+        <form asp-controller="Account" asp-action="DeleteMyAccount" method="post" onsubmit="return confirm('確定要永久刪除您的帳號?');">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-outline-danger">刪除我的帳號</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

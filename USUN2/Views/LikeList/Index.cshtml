@@ -1,0 +1,86 @@
+@model IReadOnlyList<USUN2.Common.Models.LikeListListItemDto>
+@{
+    ViewData["Title"] = "喜好金融商品清單";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+    <h1 class="h3 mb-0">喜好金融商品清單</h1>
+    <a class="btn btn-primary" asp-action="Create">新增喜好</a>
+</div>
+
+<form asp-action="Index" method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-6 col-lg-4">
+        <label for="q" class="form-label mb-0">依產品名稱查詢</label>
+        <input id="q" name="q" class="form-control" value="@ViewBag.ProductNameQuery" placeholder="輸入關鍵字" maxlength="200" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary">查詢</button>
+    </div>
+    <div class="col-auto">
+        <a class="btn btn-outline-secondary" asp-action="Index">重整</a>
+    </div>
+</form>
+
+@if (TempData["Message"] is string ok)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ok
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Error"] is string err)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @err
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="table-responsive shadow-sm rounded bg-white">
+    <table class="table table-striped table-hover align-middle mb-0">
+        <thead class="table-light">
+            <tr>
+                <th scope="col">產品名稱</th>
+                <th scope="col" class="text-end">單價</th>
+                <th scope="col" class="text-end">手續費率</th>
+                <th scope="col" class="text-end">數量</th>
+                <th scope="col">扣款帳號</th>
+                <th scope="col" class="text-end">扣款總額</th>
+                <th scope="col" class="text-end">總手續費</th>
+                <th scope="col">電子信箱</th>
+                <th scope="col" class="text-nowrap">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (Model.Count == 0)
+        {
+            <tr>
+                <td colspan="9" class="text-center text-muted py-4">尚無資料，請先新增。</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var row in Model)
+            {
+                <tr>
+                    <td>@row.ProductName</td>
+                    <td class="text-end">@row.Price.ToString("N2")</td>
+                    <td class="text-end">@row.FeeRate.ToString("P2")</td>
+                    <td class="text-end">@row.OrderQty</td>
+                    <td>@row.DebitAccount</td>
+                    <td class="text-end">@row.TotalAmount.ToString("N2")</td>
+                    <td class="text-end">@row.TotalFee.ToString("N2")</td>
+                    <td>@row.Email</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@row.Sn">編輯</a>
+                        <form asp-action="Delete" asp-route-id="@row.Sn" method="post" class="d-inline" onsubmit="return confirm('確定刪除此筆紀錄？');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,68 @@
+@model USUN2.Common.Models.LikeListUpdateRequest
+@{
+    ViewData["Title"] = "編輯喜好金融商品";
+    var userDisplay = ViewBag.UserDisplay as string ?? Model.UserId;
+}
+
+<h1 class="h3 mb-3">編輯喜好金融商品</h1>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form asp-action="Edit" method="post" novalidate>
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="Sn" />
+                    <input type="hidden" asp-for="UserId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-3">
+                        <label class="form-label">使用者(不可變更)</label>
+                        <input class="form-control" value="@userDisplay" readonly />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="ProductName" class="form-label">產品名稱</label>
+                        <input asp-for="ProductName" class="form-control" autocomplete="off" />
+                        <span asp-validation-for="ProductName" class="text-danger"></span>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="Price" class="form-label">產品價格(台幣)</label>
+                            <input asp-for="Price" class="form-control" inputmode="decimal" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="FeeRate" class="form-label">手續費率(0–1)</label>
+                            <input asp-for="FeeRate" class="form-control" inputmode="decimal" />
+                            <span asp-validation-for="FeeRate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-1">
+                        <div class="col-md-6">
+                            <label asp-for="OrderQty" class="form-label">購買數量</label>
+                            <input asp-for="OrderQty" class="form-control" inputmode="numeric" />
+                            <span asp-validation-for="OrderQty" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DebitAccount" class="form-label">預計扣款帳號</label>
+                            <input asp-for="DebitAccount" class="form-control" readonly />
+                            <span asp-validation-for="DebitAccount" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 d-flex flex-wrap gap-2">
+                        <button type="submit" class="btn btn-primary">更新</button>
+                        <a class="btn btn-outline-secondary" asp-action="Index">返回清單</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

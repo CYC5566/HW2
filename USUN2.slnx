@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="USUN2/USUN2.csproj" />
+  <Project Path="USUN2.Common/USUN2.Common.csproj" />
+  <Project Path="USUN2.Data/USUN2.Data.csproj" />
+  <Project Path="USUN2.Business/USUN2.Business.csproj" />
+</Solution>
